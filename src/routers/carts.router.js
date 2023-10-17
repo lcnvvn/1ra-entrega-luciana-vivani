@@ -50,12 +50,16 @@ router.post("/carts/:cid/product/:pid", async (req, res) => {
     return res.status(400).json(`⚠️ No se encuentra el cart con ID ${pid}`);
   }
   const existingCart = carts[cartIndex];
-  const products = existingCart[1]; /* 
-  const newProduct = {id: pid, quantity: 1}
-  products.push(newProduct);
-  carts.push(cart);
+  const products = existingCart.products;
+  const existingProduct = products.find((product) => product.id === pid);
+  if (existingProduct) {
+    existingProduct.quantity += 1;
+  } else {
+    const newProduct = { id: pid, quantity: 1 };
+    products.push(newProduct);
+  }
   await saveJSONToFile(dbPath, carts);
-  res.status(200).json(cart); */
+  res.status(200).json(cart);
 });
 
 export default router;
